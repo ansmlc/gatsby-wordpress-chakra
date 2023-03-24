@@ -1,128 +1,127 @@
 import * as React from "react"
-import { Link } from "gatsby"
-import { StaticImage } from "gatsby-plugin-image"
-
-import Layout from "../components/layout"
-import Seo from "../components/seo"
-import * as styles from "../components/index.module.css"
-
-const links = [
-  {
-    text: "Tutorial",
-    url: "https://www.gatsbyjs.com/docs/tutorial",
-    description:
-      "A great place to get started if you're new to web development. Designed to guide you through setting up your first Gatsby site.",
-  },
-  {
-    text: "Examples",
-    url: "https://github.com/gatsbyjs/gatsby/tree/master/examples",
-    description:
-      "A collection of websites ranging from very basic to complex/complete that illustrate how to accomplish specific tasks within your Gatsby sites.",
-  },
-  {
-    text: "Plugin Library",
-    url: "https://www.gatsbyjs.com/plugins",
-    description:
-      "Learn how to add functionality and customize your Gatsby site or app with thousands of plugins built by our amazing developer community.",
-  },
-  {
-    text: "Build and Host",
-    url: "https://www.gatsbyjs.com/cloud",
-    description:
-      "Now you’re ready to show the world! Give your Gatsby site superpowers: Build and host on Gatsby Cloud. Get started for free!",
-  },
-]
-
-const samplePageLinks = [
-  {
-    text: "Page 2",
-    url: "page-2",
-    badge: false,
-    description:
-      "A simple example of linking to another page within a Gatsby site",
-  },
-  { text: "TypeScript", url: "using-typescript" },
-  { text: "Server Side Rendering", url: "using-ssr" },
-  { text: "Deferred Static Generation", url: "using-dsg" },
-]
-
-const moreLinks = [
-  { text: "Join us on Discord", url: "https://gatsby.dev/discord" },
-  {
-    text: "Documentation",
-    url: "https://gatsbyjs.com/docs/",
-  },
-  {
-    text: "Starters",
-    url: "https://gatsbyjs.com/starters/",
-  },
-  {
-    text: "Showcase",
-    url: "https://gatsbyjs.com/showcase/",
-  },
-  {
-    text: "Contributing",
-    url: "https://www.gatsbyjs.com/contributing/",
-  },
-  { text: "Issues", url: "https://github.com/gatsbyjs/gatsby/issues" },
-]
-
-const utmParameters = `?utm_source=starter&utm_medium=start-page&utm_campaign=default-starter`
-
-const IndexPage = () => (
-  <Layout>
-    <div className={styles.textCenter}>
-      <StaticImage
-        src="../images/example.png"
-        loading="eager"
-        width={64}
-        quality={95}
-        formats={["auto", "webp", "avif"]}
-        alt=""
-        style={{ marginBottom: `var(--space-3)` }}
+import {
+  useStaticQuery,
+  graphql,
+  Link 
+} from 'gatsby'
+import { Center } from "@chakra-ui/layout"
+import Layout from "../components/layout/layout"
+import ListPosts from "../components/posts/listPosts.js"
+import GatsbyPressIntro from "../components/frontpage/intro"
+import SectionHeading from "../components/layout/sectionHeading"
+import Features from '../components/frontpage/features'
+import Seo from "../components/cta/seo"
+import MailChimpForm from "../components/cta/newsletter"
+import { Fade } from 'react-awesome-reveal'
+import SecondaryButton from "../components/buttons/secondaryButton"
+ 
+const HomePage = () => {
+  const data = useStaticQuery(graphql`
+  query HomePageQuery {
+    allSite {
+      nodes {
+        siteMetadata {
+          frontpageIntro {
+            description
+            firstTagline
+            secondTagline
+          }
+        }
+      }
+    }
+    wp {
+      allSettings {
+        generalSettingsTitle
+      }
+    }
+    post: allWpPost(
+        sort: { fields: [date], order: ASC }
+        limit: 6
+        filter: { categories: { nodes: { elemMatch: { slug: { ne: "featured" } } } } }
+    ) 
+    {
+      edges {
+        node {
+          ...postFields
+          categories {
+            nodes {
+              uri
+            }
+          }
+          tags {
+            nodes {
+              name
+              uri
+              slug
+            }
+          }
+          author {
+            node {
+              name
+              slug
+              avatar {
+                url
+              }
+            }
+          }
+        }
+      }
+    }
+    featured: allWpPost(
+      sort: { fields: [date], order: DESC }
+      limit: 6
+      filter: { categories: { nodes: { elemMatch: { slug: { eq: "featured" } } } } }
+      ) 
+    {
+      nodes {
+        ...postFields
+        categories {
+          nodes {
+            slug
+          }
+        }
+      }
+    }
+  }
+`)
+  const posts = data?.post?.edges  
+  const featured = data?.featured?.nodes
+  const siteTitle = data?.wp?.allSettings?.generalSettingsTitle
+  const introData = data?.allSite?.nodes[0]?.siteMetadata?.frontpageIntro
+  return (
+    <Layout>
+      <Seo title={siteTitle}/>
+      <GatsbyPressIntro 
+        introData={introData}
       />
-      <h1>
-        Welcome to <b>Gatsby!</b>
-      </h1>
-      <p className={styles.intro}>
-        <b>Example pages:</b>{" "}
-        {samplePageLinks.map((link, i) => (
-          <React.Fragment key={link.url}>
-            <Link to={link.url}>{link.text}</Link>
-            {i !== samplePageLinks.length - 1 && <> · </>}
-          </React.Fragment>
-        ))}
-        <br />
-        Edit <code>src/pages/index.js</code> to update this page.
-      </p>
-    </div>
-    <ul className={styles.list}>
-      {links.map(link => (
-        <li key={link.url} className={styles.listItem}>
-          <a
-            className={styles.listItemLink}
-            href={`${link.url}${utmParameters}`}
-          >
-            {link.text} ↗
-          </a>
-          <p className={styles.listItemDescription}>{link.description}</p>
-        </li>
-      ))}
-    </ul>
-    {moreLinks.map((link, i) => (
-      <React.Fragment key={link.url}>
-        <a href={`${link.url}${utmParameters}`}>{link.text}</a>
-        {i !== moreLinks.length - 1 && <> · </>}
-      </React.Fragment>
-    ))}
-  </Layout>
-)
-
-/**
- * Head export to define metadata for the page
- *
- * See: https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-head/
- */
-export const Head = () => <Seo title="Home" />
-
-export default IndexPage
+      <SectionHeading
+          heading={'Featured'}
+          subheading={'Latest featured posts'}
+      />
+      <span id="features"/>
+      <Features
+        featured={featured}
+      />
+      <SectionHeading
+        heading={'Latest posts'}
+        subheading={'Latest posts from our blog'}
+      />
+      <ListPosts 
+        context={`blog`} 
+        posts={posts}     
+      />
+      <Center minW={'100%'} marginY="16">
+        <Link to="/blog">
+          <SecondaryButton arrowRight>
+            Read our Blog
+          </SecondaryButton>
+        </Link>
+      </Center>
+      <Fade delay={200} duration={500} triggerOnce>
+        <MailChimpForm/>
+      </Fade>
+    </Layout>
+  )
+}
+ 
+export default HomePage

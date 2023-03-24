@@ -17,6 +17,7 @@ module.exports = {
     description: `Gatsby WordPress Starter.`,
     author: `woby`,
     siteUrl: `https://woby.netlify.app`,
+    customLogoComponent: true,
     // Social icons URLs / If not using leave it empty ( `` )
     socialLinks: {
       facebook:  `https://facebook.com`,
@@ -67,7 +68,7 @@ module.exports = {
       resolve: `gatsby-source-filesystem`,
       options: {
         name: `images`,
-        path: `${__dirname}/src/images`,
+        path: `${__dirname}/src/static/images`,
       },
     },
     `gatsby-plugin-react-helmet`,

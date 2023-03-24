@@ -10,6 +10,7 @@ module.exports = {
       extends: [
         require.resolve(`eslint-config-react-app`),
         eslintRequirePreset,
+        "plugin:react-hooks/recommended"
       ],
       parser: require.resolve(`@babel/eslint-parser`),
       parserOptions: {
