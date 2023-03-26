@@ -1,30 +1,23 @@
 import React from "react"
-import Layout from "../components/layout/layout"
 import { graphql } from "gatsby"
-import Crumb from "../components/layout/breadcrumbs.js"
-import Seo from "../components/cta/seo"
-import "@wordpress/block-library/build-style/style.css"
-import { 
-  GatsbyImage, 
-  getImage 
-} from "gatsby-plugin-image"
-import { 
-  Box, 
-  AspectRatio, 
-  Image,
-  Heading
-} from "@chakra-ui/react"
-import Card from "../components/layout/card"
+import { BaseLayout, DocumentHead } from "../features/rootLayout"
+import { GatsbyImage, getImage } from "gatsby-plugin-image"
+import { Box, AspectRatio, Image,Heading } from "@chakra-ui/react"
+import { BreadcrumbsNav } from "../features/navigation"
+import BaseBox from "../components/BaseBox"
 import { Fade } from "react-awesome-reveal"
 
+// assets
+import "@wordpress/block-library/build-style/style.css"
+import "../.././node_modules/wysiwyg.css/wysiwyg.css"
 
 export default function PagePost({ data }) {
   const page = data.allWpPage.nodes[0]
   const image = page?.featuredImage?.node?.localFile
   return (
-    <Layout>
-      <Seo title={page.title}/>
-      <Crumb data={page}/>
+    <BaseLayout>
+      <DocumentHead title={page.title}/>
+      <BreadcrumbsNav data={page}/>
       <Fade duration={500} triggerOnce>
         <Heading
           as="h1"
@@ -36,7 +29,7 @@ export default function PagePost({ data }) {
             {page.title}
         </Heading>
       </Fade>
-      <Card 
+      <BaseBox 
         as="article"
       >
         {image?
@@ -59,8 +52,8 @@ export default function PagePost({ data }) {
         >
           <div dangerouslySetInnerHTML={{ __html: page.content }} />
         </Box>
-      </Card>
-    </Layout>
+      </BaseBox>
+    </BaseLayout>
   )
 }
 export const query = graphql` 

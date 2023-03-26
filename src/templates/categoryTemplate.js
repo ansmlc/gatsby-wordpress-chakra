@@ -1,17 +1,10 @@
 import React from "react"
 import { graphql } from "gatsby"
-import Layout from "../components/layout/layout"
-import Seo from "../components/cta/seo"
-import Pager from "../components/posts/pager.js"
-import ListPosts from "../components/posts/listPosts.js"
-import ArchiveTitle from "../components/posts/archiveTitle"
-import BlogMenuItems from "../components/posts/blogMenuItems.js"
-import Crumb from "../components/layout/breadcrumbs.js"
-import { 
-  Flex,  
-  Spacer, 
-  Box 
-} from "@chakra-ui/react"
+import { BaseLayout, DocumentHead } from "../features/rootLayout"
+import { PostGrid, Pager, BlogFilterMenu } from "../features/blog"
+import { ArchiveTitle } from "../components/headings"
+import { BreadcrumbsNav } from "../features/navigation"
+import { Flex, Spacer, Box } from "@chakra-ui/react"
 
 export const query = graphql`
 query($slug: String!, $skip: Int!, $limit: Int!) {
@@ -71,9 +64,9 @@ const CategoryTemplate = ({ data, pageContext }) => {
   const categoryItems = data?.categories?.nodes
   const tagItems = data?.tags?.nodes
   return (
-    <Layout>
-      <Seo title={pageContext.category}/>
-      <Crumb pageContext={pageContext} data={data}/>
+    <BaseLayout>
+      <DocumentHead title={pageContext.category}/>
+      <BreadcrumbsNav pageContext={pageContext} data={data}/>
       <Flex>
         <Box>
           <ArchiveTitle 
@@ -83,22 +76,22 @@ const CategoryTemplate = ({ data, pageContext }) => {
         </Box>
         <Spacer />
         <Box>
-          <BlogMenuItems 
+          <BlogFilterMenu 
             tags={tagItems} 
             categories={categoryItems}
             context={'category'}
           />
         </Box>
       </Flex>
-      <Seo title="Category" />
-      <ListPosts 
+      <DocumentHead title="Category" />
+      <PostGrid 
         context={`blog`} 
         posts={posts}
       />
       <Box mt="4">
         <Pager pageContext={pageContext} />
       </Box>
-    </Layout>
+    </BaseLayout>
   )
 }
 

@@ -1,16 +1,10 @@
 import React from "react"
 import { graphql } from "gatsby"
-import { 
-  Box, 
-  Flex,
-  Spacer } from "@chakra-ui/react"
-import Layout from "../components/layout/layout"
-import Seo from "../components/cta/seo"
-import Pager from "../components/posts/pager.js"
-import ListPosts from "../components/posts/listPosts.js"
-import ArchiveTitle from "../components/posts/archiveTitle"
-import Crumb from "../components/layout/breadcrumbs"
-import BlogMenuItems from "../components/posts/blogMenuItems.js"
+import { Box, Flex, Spacer } from "@chakra-ui/react"
+import { BaseLayout, DocumentHead } from "../features/rootLayout"
+import { PostGrid, Pager, BlogFilterMenu } from "../features/blog"
+import { ArchiveTitle } from "../components/headings"
+import { BreadcrumbsNav } from "../features/navigation"
 
 export const query = graphql`
   query($slug: String!, $skip: Int!, $limit: Int!) {
@@ -69,9 +63,9 @@ const TagTemplate = ({ data, pageContext }) => {
   const categoryItems = data?.categories?.nodes
   const tagItems = data?.tags?.nodes
   return (
-    <Layout>
-      <Seo title={pageContext.tag}/>
-      <Crumb pageContext={pageContext} data={data}/>
+    <BaseLayout>
+      <DocumentHead title={pageContext.tag}/>
+      <BreadcrumbsNav pageContext={pageContext} data={data}/>
       <Flex>
         <Box>
           <ArchiveTitle 
@@ -81,18 +75,18 @@ const TagTemplate = ({ data, pageContext }) => {
         </Box>
         <Spacer />
         <Box>
-        <BlogMenuItems 
+        <BlogFilterMenu 
             tags={tagItems} 
             categories={categoryItems}
             context={'tag'}
           />
         </Box>
       </Flex>
-      <ListPosts context={`blog`} posts={posts}/>
+      <PostGrid context={`blog`} posts={posts}/>
       <Box mt="4">
         <Pager pageContext={pageContext} />
       </Box>
-    </Layout>
+    </BaseLayout>
   )
 }
 

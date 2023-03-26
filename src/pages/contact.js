@@ -10,20 +10,19 @@ import {
     Textarea,
     Text,
     useColorModeValue
-  } from '@chakra-ui/react';
-  import { BiEnvelope } from "@react-icons/all-files/bi/BiEnvelope"
-  import { BiUser } from '@react-icons/all-files/bi/BiUser';
-import Layout from "../components/layout/layout";
-import Seo from "../components/cta/seo"
-import Crumb from "../components/layout/breadcrumbs.js"
-import PrimaryButton from "../components/buttons/primaryButton";
+} from '@chakra-ui/react';
+import { BiEnvelope } from "@react-icons/all-files/bi/BiEnvelope"
+import { BiUser } from '@react-icons/all-files/bi/BiUser';
+import { BaseLayout, DocumentHead } from "../features/rootLayout";
+import { BreadcrumbsNav } from "../features/navigation";
+import { PrimaryButton } from "../components/buttons"
 
-  
+
 export default function Component ()  {
     return (
-<Layout>
-    <Seo title="Contact"/>
-    <Crumb otherContext="contact"/>
+<BaseLayout>
+    <DocumentHead title="Contact"/>
+    <BreadcrumbsNav otherContext="contact"/>
     <Text
         as="h1"
         fontWeight="bold"
@@ -79,6 +78,6 @@ export default function Component ()  {
             </FormControl>
             </VStack>
         </Box>
-    </Layout>
+    </BaseLayout>
     );
   }

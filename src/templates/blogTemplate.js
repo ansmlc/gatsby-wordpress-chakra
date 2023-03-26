@@ -1,18 +1,11 @@
 import React from "react"
 import { graphql } from "gatsby"
 import PropTypes from 'prop-types'
-import Layout from "../components/layout/layout"
-import Seo from "../components/cta/seo"
-import Pager from "../components/posts/pager.js"
-import ListPosts from "../components/posts/listPosts.js"
-import ArchiveTitle from "../components/posts/archiveTitle"
-import BlogMenuItems from "../components/posts/blogMenuItems.js"
-import {
-  Flex, 
-  Box, 
-  Spacer
-} from "@chakra-ui/react"
-import Crumb from "../components/layout/breadcrumbs"
+import { Flex, Box, Spacer } from "@chakra-ui/react"
+import { BaseLayout, DocumentHead } from "../features/rootLayout"
+import { BreadcrumbsNav } from "../features/navigation"
+import { PostGrid, Pager, BlogFilterMenu } from "../features/blog"
+import { ArchiveTitle } from "../components/headings"
 
 export const query = graphql`
 query( $limit: Int!, $skip: Int!) {
@@ -75,9 +68,9 @@ const BlogPage  = ({ pageContext, data }) => {
     const categoryItems = data?.categories?.nodes
     const tagItems = data?.tags?.nodes
     return (
-    <Layout>
-      <Seo title="Blog" /> 
-      <Crumb pageContext={pageContext}/>
+    <BaseLayout>
+      <DocumentHead title="Blog" /> 
+      <BreadcrumbsNav pageContext={pageContext}/>
       <Flex>
         <Box>
           <ArchiveTitle 
@@ -88,16 +81,16 @@ const BlogPage  = ({ pageContext, data }) => {
         </Box>
         <Spacer />
         <Box>
-          <BlogMenuItems
+          <BlogFilterMenu
             tags={tagItems} 
             categories={categoryItems}
             context={'blog'}
           />
         </Box>
       </Flex>
-      <ListPosts context={`blog`} posts={posts}/>
+      <PostGrid context={`blog`} posts={posts}/>
       <Pager pageContext={pageContext} />
-    </Layout>
+    </BaseLayout>
     )
 }
 

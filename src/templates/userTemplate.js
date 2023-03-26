@@ -1,26 +1,24 @@
 import React from "react"
-import Layout from "../components/layout/layout"
-import { graphql } from "gatsby"
-import Pager from "../components/posts/pager.js"
-import ListPosts from "../components/posts/listPosts.js"
-import Crumb from "../components/layout/breadcrumbs.js"
 import { Avatar, Heading, Stack, Text } from "@chakra-ui/react"
+import { graphql } from "gatsby"
+import { PostGrid, Pager } from "../features/blog"
+import { BreadcrumbsNav } from "../features/navigation"
 
 export default function UserPage({ data, pageContext }) {
-  const user = data?.allWpPost?.edges[0]?.node?.author?.node
+  const authorData = data?.allWpPost?.edges[0]?.node?.author?.node
   const posts = data?.allWpPost?.edges
-  const avatar = user?.avatar?.url
+  const avatar = authorData?.avatar?.url
   var theName = ''
-  user?.name? 
-  theName = user?.name 
+  authorData?.name? 
+  theName = authorData?.name 
   :
-  user?.lastName && user?.firstName?
-  theName = user?.firstName + " " + user?.lastName
+  authorData?.lastName && authorData?.firstName?
+  theName = authorData?.firstName + " " + authorData?.lastName
   :
   theName = 'No username.'
   return (
-    <Layout>
-      <Crumb data={user}/>
+    <BaseLayout>
+      <BreadcrumbsNav data={authorData}/>
       <Heading
         as="h1"
         fontSize={'3xl'}
@@ -35,7 +33,7 @@ export default function UserPage({ data, pageContext }) {
           alt={'Author'}
         />
         <Stack maxW={{ base: "full", md: "50%"}} direction={'column'} spacing={0} fontSize={'normal'}>
-          <Text color={'gray.700'}>{user?.description} </Text>
+          <Text color={'gray.700'}>{authorData?.description} </Text>
         </Stack>
       </Stack>
       <Heading 
@@ -46,9 +44,9 @@ export default function UserPage({ data, pageContext }) {
       >
         {"Latest posts by " + theName + ":"}
       </Heading>
-      <ListPosts context={`blog`} posts={posts}/>
+      <PostGrid context={`blog`} posts={posts}/>
       <Pager pageContext={pageContext} />
-    </Layout>
+    </BaseLayout>
   )
 }
 export const query = graphql`
