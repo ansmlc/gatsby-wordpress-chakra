@@ -1,0 +1,27 @@
+{
+  "globals": {
+    "graphql": true,
+    "__PATH_PREFIX__": true,
+    "__TRAILING_SLASH__": true,
+    "__BASE_PATH__": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2020
+  },
+  "extends": [
+    "react-app",
+    "airbnb",
+  	"eslint:recommended",
+		"plugin:react/recommended",
+    "plugin:prettier/recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "plugins": ["react", "prettier"],
+  "rules": {
+    "prettier/prettier": 2
+  }
+}
+
+
+
+

@@ -1,4 +1,4 @@
-import AuthorWidget from "./AuthorWidget";
-import PostMeta from "./PostMeta"
+import AuthorWidget from './AuthorWidget';
+import PostMeta from './PostMeta';
 
-export { AuthorWidget, PostMeta }
+export { AuthorWidget, PostMeta };

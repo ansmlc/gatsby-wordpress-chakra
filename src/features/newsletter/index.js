@@ -1,2 +1,3 @@
-import Newsletter from "./Newsletter";
-export default Newsletter
+import Newsletter from './Newsletter.tsx';
+
+export default Newsletter;
