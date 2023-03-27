@@ -1,4 +1,4 @@
-import BlogFilterMenu from "./blogFilterMenu";
+import BlogFilterMenu from "./blogMenu/blogFilterMenu";
 import NextAndPreviousPost from "./nextAndPreviousPost";
 import Pager from "./pager";
 import PostGrid from "./blogGrid/PostGrid";
