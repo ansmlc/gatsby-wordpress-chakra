@@ -82,7 +82,7 @@ module.exports = {
         // replace this url with the url of your wordpress install
         // http://127.0.0.1/wpgatsby/graphql
 
-        url: 'https://limomet.a2hosted.com/websby/graphql',
+        url: process.env.WORDPRESS_ENDPOINT,
       },
     },
     'gatsby-plugin-image',
